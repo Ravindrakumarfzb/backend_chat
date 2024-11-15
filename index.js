@@ -70,7 +70,7 @@ http.listen(process.env.PORT || PORT, (req, res) => {
 });
 const io = socket(http, {
   cors: {
-    origin: "http://localhost:4200",
+    origin: process.env.Url,
     credentials: true,
   },
 });
