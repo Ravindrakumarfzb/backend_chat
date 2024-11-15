@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const socket = require('socket.io');
-
+const multer = require('multer');
+const path = require('path');
 //new addition
 const InitiateMongoServer = require("./config/db");
 const morgan = require('morgan');
@@ -12,9 +13,9 @@ const cors = require('cors');
 const app = express();
 var http = require('http').createServer(app);
 app.use(cors());
-
 // Middleware
 app.use('/uploads', express.static('uploads'));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const messageRoutes = require('./routes/messagesRoute');
@@ -32,12 +33,30 @@ app.use(morgan('dev'))
 app.use("/user", user);
 app.use("/message",messageRoutes);
 
-//error handling api
-app.use((req, res, next) => {
-  const error = new Error('Not found');
-  error.status = 404;
-  next(error)
+
+// Configure multer for file uploads
+const storage=multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,'./uploads')
+  },
+  filename:function(req,file,cb){
+    cb(null,file.originalname);
+  }
 });
+
+const upload = multer({ storage });
+
+// Serve static files from the uploads directory
+// app.use('/uploads', express.static('uploads'));
+
+
+
+//error handling api
+// app.use((req, res, next) => {
+//   const error = new Error('Not found');
+//   error.status = 404;
+//   next(error)
+// });
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
   res.json({
@@ -74,6 +93,17 @@ io.on("connection", async (socket) => {
     }
   });
 });
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  const imageUrl = `http://localhost:4000/uploads/${req.file.filename}`;
+  io.emit('imageUploaded', { imageUrl }); // Emit to all connected clients
+  res.json({ imageUrl });
+});
+// app.post('/upload', upload.single('images'), (req, res) => {
+//   debugger
+//   io.emit('fileUploaded', req.file);
+//   res.sendStatus(200);
+// });
 
 io.on('disconnect', async ()=>{
   console.log("user Disconnected");

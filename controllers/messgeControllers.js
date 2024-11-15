@@ -12,10 +12,10 @@ module.exports.getMessages = async (req, res, next) => {
     const projectedMessages = messages.map((msg) => {
       return {
         fromSelf: msg.sender._id.toString() === from,
-        message: msg.message.text,
+        message: msg.message,
         createdAt: msg.createdAt,
         username: msg.sender.username,
-        profilePic: msg.sender.profilePic,
+        imageUrl: msg.imageUrl,
       };
       
     });
@@ -27,13 +27,15 @@ module.exports.getMessages = async (req, res, next) => {
 
 module.exports.addMessage = async (req, res, next) => {
   try {
-    const { from, to, message } = req.body;
+    const { from, to, message,imageUrl ,sendAudio} = req.body;
+    
     const data = await messageModel.create({
-      message: { text: message },
+      message: message ,
+      imageUrl: imageUrl ,
+      sendAudio: sendAudio ,
       users: [from, to],
       sender: from,
-    });
-
+    })
     if (data) return res.json({ msg: "Message added successfully." });
     else return res.json({ msg: "Failed to add message to the database" });
   } catch (ex) {

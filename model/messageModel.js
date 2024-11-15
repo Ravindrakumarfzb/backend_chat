@@ -2,13 +2,11 @@ const mongoose = require("mongoose");
 
 const MessageSchema = mongoose.Schema(
   {
-    message: {
-      text: { type: String, required: true },
-      sendImage: { type: String, default:null },
+      message: {type: String, required: false,default:null},
+      imageUrl: { type: String, default:null },
       sendAudio: { type: String, default:null },
-    },
-    users: Array,
-    sender: {
+      users: Array,
+      sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

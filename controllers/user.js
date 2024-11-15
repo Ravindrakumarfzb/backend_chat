@@ -184,8 +184,7 @@ exports.UserSignUp= async (req, res) => {
 
   exports.FindAllUserList =async (req,res)=>{
     try {
-      const user = await User.find({isAdmin:false});
-      console.log(user);
+      const user = await User.find();
       res.json({user:user.map(user=>{
         return {
          name:user.username,
