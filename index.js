@@ -95,7 +95,8 @@ io.on("connection", async (socket) => {
 });
 
 app.post('/upload', upload.single('image'), (req, res) => {
-  const imageUrl = `http://localhost:4000/uploads/${req.file.filename}`;
+  const imageUrl = `https://backend-chat-jpq4.onrender.com/uploads/${req.file.filename}`;
+  // const imageUrl = `http://localhost:4000/uploads/${req.file.filename}`;
   io.emit('imageUploaded', { imageUrl }); // Emit to all connected clients
   res.json({ imageUrl });
 });
