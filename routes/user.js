@@ -30,7 +30,7 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-router.post( "/signup", [check("username", "Please Enter a Valid Username")
+router.post( "/signup", [check("useName", "Please Enter a Valid Username")
       .not()
       .isEmpty(),
       check("email", "Please enter a valid email").isEmail(),
@@ -53,7 +53,7 @@ router.post(
 );
 
 router.get("/me/:id", UsersControllers.findByIdUser);
-router.put('/:id', Auth, UsersControllers.UpdateUser);
+router.patch('/update-profile/:id', UsersControllers.UpdateProfile);
 router.put('/picture/:id', upload.single('profilePic'), UsersControllers.UpdateProfilePic);
 router.get('/allUser',UsersControllers.FindAllUserList);
 

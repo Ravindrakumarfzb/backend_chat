@@ -104,7 +104,7 @@ exports.UserSignUp= async (req, res) => {
             user,
             user:{
               _id:user._id,
-              userName:user.username,
+              userName:user.userName,
               email:user.email,
              // createdAt:new Date(user.createdAt),
               updatedAt:new Date(user.updatedAt),
@@ -125,35 +125,52 @@ exports.UserSignUp= async (req, res) => {
     }
   }
 
-  exports.UpdateUser = async (req, res) => {
-    const user = await User.findById(req.params.id);
-    const salt = await bcrypt.genSalt(10);
-    // password = await bcrypt.hash(req.body.password, salt);
-    // console.log(password);
-    if (user) {
-      user.username = req.body.username || user.username;
-      user.email = req.body.email || user.email;
-      user.mobileNumber = req.body.mobileNumber || user.mobileNumber;
-      user.description = req.body.description || user.description;
-      const updatedUser = await user.save();
-      res.json({message:"Profile updated successfully",
-      updatedUser:{
-          _id:user._id,
-          userName:updatedUser.username,
-          email:updatedUser.email,
-          updatedAt:user.updatedAt,
-          isAdmin:updatedUser.isAdmin,
-          userType:updatedUser.userType,
-          profilePic:updatedUser.profilePic,
-          mobileNumber:updatedUser.mobileNumber,
-          description:updatedUser.description,
-        }
-      });
-    } else {
+  // exports.UpdateProfile = async (req, res) => {
+  //   console.log(req.params);
+    
+  //   const user = await User.findById(req.params.id);
+  //   // const salt = await bcrypt.genSalt(10);
+  //   // password = await bcrypt.hash(req.body.password, salt);
+  //   // console.log(password);
+  //   if (user) {
+  //     user.username = req.body.username || user.username;
+  //     user.email = req.body.email || user.email;
+  //     user.mobileNumber = req.body.mobileNumber || user.mobileNumber;
+  //     user.description = req.body.description || user.description;
+  //     const updatedUser = await user.save();
+  //     res.json({message:"Profile updated successfully",
+  //     updatedUser:{
+  //         _id:user._id,
+  //         userName:updatedUser.username,
+  //         email:updatedUser.email,
+  //         updatedAt:user.updatedAt,
+  //         isAdmin:updatedUser.isAdmin,
+  //         userType:updatedUser.userType,
+  //         profilePic:updatedUser.profilePic,
+  //         mobileNumber:updatedUser.mobileNumber,
+  //         description:updatedUser.description,
+  //       }
+  //     });
+  //   } 
+  //   else {
 
-      res.status(404).json("User Not Found")
-    }
-  };
+  //     res.status(404).json("User Not Found")
+  //   }
+  // };
+exports.UpdateProfile = async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).send({ message: updatedUser });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
 
 
@@ -187,7 +204,7 @@ exports.UserSignUp= async (req, res) => {
       const user = await User.find();
       res.json({user:user.map(user=>{
         return {
-         name:user.username,
+         userName:user.userName,
          email:user.email,
          _id:user._id,
          isOnline:user.isOnline,

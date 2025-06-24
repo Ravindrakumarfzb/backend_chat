@@ -70,7 +70,7 @@ http.listen(process.env.PORT || PORT, (req, res) => {
 });
 const io = socket(http, {
   cors: {
-    origin: process.env.Url,
+    origin: "http://localhost:4200",
     credentials: true,
   },
 });
@@ -95,8 +95,7 @@ io.on("connection", async (socket) => {
 });
 
 app.post('/upload', upload.single('image'), (req, res) => {
-  const imageUrl = `https://backend-chat-jpq4.onrender.com/uploads/${req.file.filename}`;
-  // const imageUrl = `http://localhost:4000/uploads/${req.file.filename}`;
+  const imageUrl = `http://localhost:4000/uploads/${req.file.filename}`;
   io.emit('imageUploaded', { imageUrl }); // Emit to all connected clients
   res.json({ imageUrl });
 });
