@@ -8,18 +8,19 @@ module.exports.getMessages = async (req, res, next) => {
         $all: [from, to],
       },
     }).populate('sender').sort({ updatedAt: 1 });
-
+    console.log(messages);
     const projectedMessages = messages.map((msg) => {
       return {
         fromSelf: msg.sender._id.toString() === from,
         message: msg.message,
         createdAt: msg.createdAt,
-        username: msg.sender.username,
+        userName: msg.sender._id.toString() === from==true? "You":msg.sender.userName,
+        // userName: msg.sender.userName,
         imageUrl: msg.imageUrl,
       };
       
     });
-    res.json(projectedMessages);
+    res.send(projectedMessages);
   } catch (ex) {
     next(ex);
   }
