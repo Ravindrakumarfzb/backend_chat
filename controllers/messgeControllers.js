@@ -8,7 +8,6 @@ module.exports.getMessages = async (req, res, next) => {
         $all: [from, to],
       },
     }).populate('sender').sort({ updatedAt: 1 });
-    console.log(messages);
     const projectedMessages = messages.map((msg) => {
       return {
         fromSelf: msg.sender._id.toString() === from,

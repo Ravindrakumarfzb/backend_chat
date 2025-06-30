@@ -53,10 +53,7 @@ router.post(
 );
 
 router.get("/me/:id", UsersControllers.findByIdUser);
-router.patch('/update-profile/:id', UsersControllers.UpdateProfile);
-router.put('/picture/:id', upload.single('profilePic'), UsersControllers.UpdateProfilePic);
 router.get('/allUser',UsersControllers.FindAllUserList);
-
 router.post('/email-send',UsersControllers.emailSend);
 router.post('/change-password',UsersControllers.changePassword);
 
