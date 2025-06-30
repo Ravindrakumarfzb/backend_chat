@@ -30,9 +30,7 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-router.post( "/signup", [check("useName", "Please Enter a Valid Username")
-      .not()
-      .isEmpty(),
+router.post( "/signup", [
       check("email", "Please enter a valid email").isEmail(),
       check("password", "Please enter a valid password").isLength({
       min: 6

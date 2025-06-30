@@ -24,8 +24,8 @@ exports.UpdateProfile = async (req, res) => {
                 $set: req.body,
             },
             { new: true }
-        );
-        res.status(200).send({ message: updatedUser });
+        ).select('email userName isAdmin userType profilePic updatedAt')
+        res.status(200).send({ user: updatedUser });
     } catch (err) {
         res.status(500).send(err);
     }
@@ -63,8 +63,9 @@ exports.UpdateProfilePic = async (req, res) => {
                     $set: { profilePic: result.url },
                 },
                 { new: true }
-            );
-            res.status(200).send({ message: updatedUser });
+            ).select('email userName isAdmin userType profilePic updatedAt')
+            
+            res.status(200).send({ user: updatedUser });
 
         })
     } catch (ex) {

@@ -10,11 +10,7 @@ exports.UserSignUp = async (req, res) => {
       errors: errors.array()
     });
   }
-  const {
-    username,
-    email,
-    password
-  } = req.body;
+  const {userName,email,password} = req.body;
   try {
     let user = await User.findOne({
       email
@@ -26,7 +22,7 @@ exports.UserSignUp = async (req, res) => {
     }
 
     user = new User({
-      username,
+      userName,
       email,
       password
     });
@@ -127,7 +123,7 @@ exports.UserLogin = async (req, res) => {
 
 exports.findByIdUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("username email updatedAt profilePic mobileNumber description ")
+    const user = await User.findById(req.params.id).select("userName email updatedAt profilePic mobileNumber description ")
     res.json(user);
   } catch (e) {
     res.send({ message: "Error in Fetching user" });
