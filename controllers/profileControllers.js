@@ -1,4 +1,5 @@
 const express = require("express");
+const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2;
 const ProfileModel = require("../model/User");
 require('dotenv').config();
@@ -10,7 +11,6 @@ cloudinary.config({
 });
 
 
-const fileUpload = require('express-fileupload');
 const app = express();
 app.use(fileUpload({
     useTempFiles: true
@@ -57,10 +57,11 @@ exports.UpdateProfilePic = async (req, res) => {
     try {
       const file = req.files.profilePic.tempFilePath;
         cloudinary.uploader.upload(file, { public_id: `profile-img_${Date.now()}` }, async (err, result) => {
+
             const updatedUser = await ProfileModel.findByIdAndUpdate(
                 req.params.id,
                 {
-                    $set: { profilePic: result.url },
+                    $set: { profilePic: result.secure_url },
                 },
                 { new: true }
             ).select('email userName isAdmin userType profilePic updatedAt')

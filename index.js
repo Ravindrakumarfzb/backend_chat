@@ -126,7 +126,7 @@ app.post('/upload', async (req, res) => {
   cloudinary.uploader.upload(file, { public_id: `chat-img_${Date.now()}` }, (err, result) => {
     io.emit('imageUploaded', { result });
     try {
-      const data = new ImageUrl({ imageUrl: result.url, userID: req.body.userID });
+      const data = new ImageUrl({ imageUrl: result.secure_url, userID: req.body.userID });
       const savedAddress = data.save();
       if (data)
         return res.status(200).send({ msg: 200, data });
