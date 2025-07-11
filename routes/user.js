@@ -51,7 +51,7 @@ router.post(
 );
 
 router.get("/me/:id", UsersControllers.findByIdUser);
-router.get('/allUser',UsersControllers.FindAllUserList);
+router.get('/allUser/:id',UsersControllers.FindAllUserList);
 router.post('/email-send',UsersControllers.emailSend);
 router.post('/change-password',UsersControllers.changePassword);
 

@@ -1,7 +1,7 @@
 const express = require("express");
 const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2;
-const ProfileModel = require("../model/User");
+const UserModel = require("../model/User");
 require('dotenv').config();
 // Configuration
 cloudinary.config({
@@ -18,13 +18,13 @@ app.use(fileUpload({
 
 exports.UpdateProfile = async (req, res) => {
     try {
-        const updatedUser = await ProfileModel.findByIdAndUpdate(
+        const updatedUser = await UserModel.findByIdAndUpdate(
             req.params.id,
             {
                 $set: req.body,
             },
             { new: true }
-        ).select('email userName isAdmin userType profilePic updatedAt')
+        ).select('email userName isAdmin userType imageUrl updatedAt')
         res.status(200).send({ user: updatedUser });
     } catch (err) {
         res.status(500).send(err);
@@ -32,39 +32,18 @@ exports.UpdateProfile = async (req, res) => {
 };
 
 
-// const user = await ProfileModel.findById(req.params.id);
-// if (user) {
-
-//     user.username = req.body.username || user.username;
-//     user.email = req.body.email || user.email;
-//     user.profilePic = req.file.path || user.profilePic;
-//     user.mobileNumber = req.body.mobileNumber || user.mobileNumber;
-//     user.description = req.body.description || user.description;
-//     const updatedUser = await user.save();
-//     res.json({
-//         message: "Profile updated successfully",
-//     });
-// } else {
-
-//     res.status(404).json("Profile Not Found")
-// }
-
-
-
-
 
 exports.UpdateProfilePic = async (req, res) => {
     try {
-      const file = req.files.profilePic.tempFilePath;
+      const file = req?.files?.imageUrl?.tempFilePath;
         cloudinary.uploader.upload(file, { public_id: `profile-img_${Date.now()}` }, async (err, result) => {
-
-            const updatedUser = await ProfileModel.findByIdAndUpdate(
+            const updatedUser = await UserModel.findByIdAndUpdate(
                 req.params.id,
                 {
-                    $set: { profilePic: result.secure_url },
+                    $set: { imageUrl: result.secure_url },
                 },
                 { new: true }
-            ).select('email userName isAdmin userType profilePic updatedAt')
+            ).select('email userName isAdmin userType imageUrl updatedAt')
             
             res.status(200).send({ user: updatedUser });
 

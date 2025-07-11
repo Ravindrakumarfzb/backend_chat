@@ -6,11 +6,13 @@ const UserSchema = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false },
-    profilePic: { type: String, default: null },
+    imageUrl: { type: String, default: 'https://res.cloudinary.com/djcysaola/image/upload/v1752136061/chat-img_1752136058366.png' },
     mobileNumber: { type: Number, default: "0" },
     description: { type: String, default: "0" },
     isOnline: { type: Boolean, default: false },
-    userType: { type: String, default: "Admin_Panel" },
+    userType: { type: String, default: "Admin_Panel"},
+    acceptInvite:{type:Boolean,default:false},
+
   },
 
   { timestamps: true }
